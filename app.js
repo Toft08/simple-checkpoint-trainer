@@ -184,7 +184,7 @@ function checkAnswer() {
         
         blanks.forEach(function(blank, index) {
             const userAnswer = blank.value.trim();
-            const correctAnswer = exercise.blanks[index].answer;
+            const correctAnswer = exercise.blanks[index].answer.trim();
             const isCorrect = userAnswer === correctAnswer;
             
             blank.classList.remove('correct', 'incorrect');

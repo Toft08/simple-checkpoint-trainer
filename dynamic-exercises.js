@@ -41,10 +41,11 @@ class DynamicExerciseGenerator {
             { id: 25, level: 'g4', folder: 'TopFrequents', title: 'Top Frequents', description: 'Find most frequent elements' }
         ];
         
-        // Filter exercises based on selected levels
-        this.availableExercises = this.exerciseMetadata.filter(ex => 
-            this.config.levels.includes(ex.level)
-        ).slice(0, this.config.tasks); // Limit to requested number of tasks
+        // Filter and randomly select exercises based on selected levels
+        this.availableExercises = this.selectExercises(
+            this.config.levels, 
+            this.config.tasks
+        );
         
         // Patterns to identify important code elements to potentially blank out
         this.blankablePatterns = [
@@ -272,6 +273,48 @@ class DynamicExerciseGenerator {
         };
         
         return descriptions[methodName] || `performs ${methodName} operation`;
+    }
+
+    // Select exercises evenly distributed across levels and randomized
+    selectExercises(selectedLevels, totalTasks) {
+        // Group exercises by level
+        const exercisesByLevel = {};
+        selectedLevels.forEach(level => {
+            exercisesByLevel[level] = this.exerciseMetadata.filter(ex => ex.level === level);
+        });
+        
+        // Calculate how many exercises per level
+        const tasksPerLevel = Math.floor(totalTasks / selectedLevels.length);
+        const remainder = totalTasks % selectedLevels.length;
+        
+        const selected = [];
+        
+        // Select exercises from each level
+        selectedLevels.forEach((level, index) => {
+            const levelExercises = exercisesByLevel[level];
+            
+            // Some levels get one extra exercise to account for remainder
+            const count = tasksPerLevel + (index < remainder ? 1 : 0);
+            
+            // Shuffle exercises for this level
+            const shuffled = this.shuffleArray([...levelExercises]);
+            
+            // Take the required number
+            selected.push(...shuffled.slice(0, Math.min(count, shuffled.length)));
+        });
+        
+        // Shuffle the final selection so levels are mixed
+        return this.shuffleArray(selected);
+    }
+    
+    // Fisher-Yates shuffle algorithm
+    shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
     }
 
     // Get all available exercises (filtered by config)
