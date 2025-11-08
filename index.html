@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Checkpoint Trainer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">☕ Java Checkpoint Trainer</h1>
+            <p class="hero-subtitle">Master Java with dynamic, personalized exercises</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Exercise Variations</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Skill Levels</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">📱</span>
+                    <span class="stat-label">Mobile Ready</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Configuration Section -->
+    <main class="container">
+        <div class="config-card">
+            <h2>🎯 Customize Your Training Session</h2>
+            
+            <!-- Number of Tasks -->
+            <div class="setting-group">
+                <h3>📊 Number of Tasks</h3>
+                <div class="toggle-group">
+                    <button class="toggle-btn active" data-tasks="5">5 Tasks</button>
+                    <button class="toggle-btn" data-tasks="10">10 Tasks</button>
+                    <button class="toggle-btn" data-tasks="15">15 Tasks</button>
+                </div>
+            </div>
+
+            <!-- Level Selection -->
+            <div class="setting-group">
+                <h3>🎓 Select Level/Groups</h3>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="g1" checked>
+                        <span class="checkmark"></span>
+                        <div class="level-info">
+                            <span class="level-badge g1">G1</span>
+                            <span class="level-title">Fundamentals</span>
+                            <span class="level-desc">Basic classes, methods, data types</span>
+                        </div>
+                    </label>
+                    
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="g2" checked>
+                        <span class="checkmark"></span>
+                        <div class="level-info">
+                            <span class="level-badge g2">G2</span>
+                            <span class="level-title">Intermediate</span>
+                            <span class="level-desc">Algorithms, validation, parsing</span>
+                        </div>
+                    </label>
+                    
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="g3">
+                        <span class="checkmark"></span>
+                        <div class="level-info">
+                            <span class="level-badge g3">G3</span>
+                            <span class="level-title">Advanced</span>
+                            <span class="level-desc">Design patterns, data structures</span>
+                        </div>
+                    </label>
+                    
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="g4">
+                        <span class="checkmark"></span>
+                        <div class="level-info">
+                            <span class="level-badge g4">G4</span>
+                            <span class="level-title">Expert</span>
+                            <span class="level-desc">Complex algorithms, optimization</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Difficulty -->
+            <div class="setting-group">
+                <h3>🔥 Difficulty Level</h3>
+                <div class="difficulty-slider">
+                    <div class="difficulty-option" data-difficulty="0.25">
+                        <div class="difficulty-circle easy"></div>
+                        <span class="difficulty-label">Easy</span>
+                        <span class="difficulty-percent">25%</span>
+                    </div>
+                    <div class="difficulty-option active" data-difficulty="0.5">
+                        <div class="difficulty-circle medium"></div>
+                        <span class="difficulty-label">Medium</span>
+                        <span class="difficulty-percent">50%</span>
+                    </div>
+                    <div class="difficulty-option" data-difficulty="0.75">
+                        <div class="difficulty-circle hard"></div>
+                        <span class="difficulty-label">Hard</span>
+                        <span class="difficulty-percent">75%</span>
+                    </div>
+                </div>
+                <p class="difficulty-help">Percentage of code blanked out</p>
+            </div>
+
+            <!-- Start Button -->
+            <div class="start-section">
+                <button class="start-btn" id="start-training">
+                    🚀 Start Training Session
+                </button>
+                <p class="session-summary" id="session-summary">
+                    5 tasks • G1, G2 levels • Medium difficulty
+                </p>
+            </div>
+        </div>
+
+        <!-- Features Preview -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎲</div>
+                <h3>Dynamic Generation</h3>
+                <p>Every exercise is unique with randomized blanks from real Java solutions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Complete Context</h3>
+                <p>Access original README files and full problem descriptions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>Instant Feedback</h3>
+                <p>Exact validation with clear debugging for learning</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Friendly</h3>
+                <p>Practice Java anywhere with responsive design</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Ready to master Java? 🔥 Configure your session above!</p>
+        </div>
+    </footer>
+
+    <!-- State Management -->
+    <script src="state-manager.js"></script>
+    <script src="state-utils.js"></script>
+    
+    <!-- Homepage Logic -->
+    <script src="homepage.js"></script>
+</body>
+</html>

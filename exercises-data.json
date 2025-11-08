@@ -1,0 +1,10 @@
+{
+  "exercises": {
+    "g1": {
+      "AgeFinder": {
+        "java": "import java.time.LocalDate;\nimport java.time.Period;\nimport java.time.format.DateTimeFormatter;\n\npublic class AgeFinder {\n    public int calculateAge(String date) {\n        try {\n            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"yyyy-MM-dd\");\n\n            LocalDate birthDate = LocalDate.parse(date, formatter);\n\n            LocalDate today = LocalDate.now();\n\n            if (birthDate.isAfter(today)) {\n                return -1;\n            }\n            return Period.between(birthDate, today).getYears();\n        } catch(Exception e) {\n            return -1;\n        }\n    }\n}",
+        "readme": "## Age Finder\\n\\n### Instructions\\n\\nCreate a class `AgeFinder` that provides a method to calculate the age from a given date. The date will be provided in the format `yyyy-MM-dd`.\\n\\nIn case of any error the method `calculateAge` should return `-1`\\n\\n> 💡 Have you ever seen someone with a negative age???\\n\\n### Expected Class\\n\\n```java\\nimport java.time.LocalDate;\\nimport java.time.Period;\\nimport java.time.format.DateTimeFormatter;\\n\\npublic class AgeFinder {\\n    public int calculateAge(String date) {\\n        // Implementation to calculate the age from the given date\\n    }\\n}\\n```"
+      }
+    }
+  }
+}

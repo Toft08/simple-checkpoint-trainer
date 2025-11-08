@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Checkpoint Trainer</title>
+    <meta name="description" content="Interactive Java learning with fill-in-the-blanks and drag-and-drop exercises">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">☕ Java Trainer</h1>
+            <div class="progress">
+                <span id="progress-text">Exercise 1 of 10</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="exercise-card" id="exercise-container">
+            <!-- Exercise content will be loaded here -->
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-secondary" id="prev-btn" disabled>Previous</button>
+            <button class="btn btn-info" id="readme-btn">View README</button>
+            <button class="btn btn-success" id="regenerate-btn">🎲 New Variation</button>
+            <button class="btn btn-primary" id="check-btn">Check Answer</button>
+            <button class="btn btn-secondary" id="next-btn" disabled>Next</button>
+        </div>
+
+        <div class="result" id="result-container" style="display: none;">
+            <div class="result-content">
+                <div class="result-icon" id="result-icon"></div>
+                <div class="result-text" id="result-text"></div>
+                <div class="result-explanation" id="result-explanation"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- README Modal -->
+    <div class="modal-overlay" id="readme-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Exercise README</h3>
+                <button class="modal-close" id="close-readme">×</button>
+            </div>
+            <div class="modal-body" id="readme-content">
+                Loading README...
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Learn Java anywhere, anytime 📱</p>
+        </div>
+    </footer>
+
+    <!-- State Management -->
+    <script src="state-manager.js"></script>
+    <script src="state-utils.js"></script>
+    
+    <!-- Application -->
+    <script src="dynamic-exercises.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
