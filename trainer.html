@@ -13,7 +13,7 @@
 <body>
     <header class="header">
         <div class="container">
-            <h1 class="logo">☕ Java Trainer</h1>
+            <h1 class="logo"><a href="index.html" class="logo-link">☕ Java Trainer</a></h1>
             <div class="progress">
                 <span id="progress-text">Exercise 1 of 10</span>
                 <div class="progress-bar">
@@ -26,6 +26,13 @@
     <div class="container">
         <div class="exercise-card" id="exercise-container">
             <!-- Exercise content will be loaded here -->
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="error-container" style="display: none;">
+            <h2>❌ Error</h2>
+            <p id="error-text"></p>
+            <button class="btn btn-primary" id="error-reload-btn">Try Again</button>
         </div>
         
         <div class="controls">
@@ -43,6 +50,31 @@
                 <div class="result-explanation" id="result-explanation"></div>
             </div>
         </div>
+
+        <!-- Completion Page -->
+        <div class="completion-page" id="completion-container" style="display: none;">
+            <div class="completion-icon" id="completion-emoji">🎉</div>
+            <h2 class="completion-title">Training Complete!</h2>
+            <p class="completion-message" id="completion-message">Congratulations!</p>
+            <div class="completion-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Exercises</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-correct">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-score">0%</div>
+                    <div class="stat-label">Score</div>
+                </div>
+            </div>
+            <div class="completion-actions">
+                <button class="btn btn-primary btn-large" id="restart-btn">🔄 Go Again</button>
+                <button class="btn btn-secondary btn-large" id="home-btn">🏠 Go Home</button>
+            </div>
+        </div>
     </div>
 
     <!-- README Modal -->
@@ -53,7 +85,7 @@
                 <button class="modal-close" id="close-readme">×</button>
             </div>
             <div class="modal-body" id="readme-content">
-                Loading README...
+                <div class="loading">📖 Loading README...</div>
             </div>
         </div>
     </div>

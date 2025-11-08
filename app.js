@@ -20,9 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         exerciseGenerator = new DynamicExerciseGenerator(config);
         console.log('✅ Exercise generator created');
         
-        // Show config summary
-        displayConfigSummary(config);
-        
         // Setup buttons
         setupEventListeners();
         
@@ -50,34 +47,6 @@ function getStoredConfig() {
     };
 }
 
-// Display configuration summary
-function displayConfigSummary(config) {
-    const levelNames = config.levels.map(level => level.toUpperCase()).join(', ');
-    const difficultyName = getDifficultyName(config.difficulty);
-    
-    const configDisplay = document.createElement('div');
-    configDisplay.className = 'config-display';
-    configDisplay.innerHTML = 
-        '<div class="session-info">' +
-        '📊 ' + config.tasks + ' tasks • ' +
-        '🎓 ' + levelNames + ' • ' +
-        '🔥 ' + difficultyName + ' (' + Math.round(config.difficulty * 100) + '%)' +
-        '<button class="config-change-btn" onclick="window.location.href=\'index.html\'">⚙️ Change</button>' +
-        '</div>';
-    
-    const container = document.querySelector('.container');
-    if (container) {
-        container.insertBefore(configDisplay, container.firstChild);
-    }
-}
-
-function getDifficultyName(difficulty) {
-    if (difficulty === 0.25) return 'Easy';
-    if (difficulty === 0.5) return 'Medium';
-    if (difficulty === 0.75) return 'Hard';
-    return 'Medium';
-}
-
 // Setup event listeners
 function setupEventListeners() {
     const prevBtn = document.getElementById('prev-btn');
@@ -86,6 +55,8 @@ function setupEventListeners() {
     const readmeBtn = document.getElementById('readme-btn');
     const regenerateBtn = document.getElementById('regenerate-btn');
     const closeReadmeBtn = document.getElementById('close-readme');
+    const restartBtn = document.getElementById('restart-btn');
+    const homeBtn = document.getElementById('home-btn');
     
     if (prevBtn) prevBtn.addEventListener('click', showPreviousExercise);
     if (nextBtn) nextBtn.addEventListener('click', showNextExercise);
@@ -93,6 +64,8 @@ function setupEventListeners() {
     if (readmeBtn) readmeBtn.addEventListener('click', showReadme);
     if (regenerateBtn) regenerateBtn.addEventListener('click', regenerateExercise);
     if (closeReadmeBtn) closeReadmeBtn.addEventListener('click', hideReadme);
+    if (restartBtn) restartBtn.addEventListener('click', restartTraining);
+    if (homeBtn) homeBtn.addEventListener('click', goHome);
     
     // Close modal on overlay click
     const readmeModal = document.getElementById('readme-modal');
@@ -226,6 +199,7 @@ function checkAnswer() {
         // Update buttons
         const checkBtn = document.getElementById('check-btn');
         const nextBtn = document.getElementById('next-btn');
+        const totalExercises = exerciseGenerator ? exerciseGenerator.getExerciseList().length : 0;
         
         if (checkBtn) {
             checkBtn.textContent = allCorrect ? 'Correct! ✓' : 'Try Again';
@@ -233,7 +207,13 @@ function checkAnswer() {
         }
         
         if (nextBtn) {
-            nextBtn.disabled = !allCorrect;
+            // Update next button text based on position
+            if (currentExerciseIndex >= totalExercises - 1) {
+                nextBtn.textContent = 'Finish';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+            nextBtn.disabled = false;
         }
         
         // Store result
@@ -277,6 +257,9 @@ function showNextExercise() {
     const totalExercises = exerciseGenerator ? exerciseGenerator.getExerciseList().length : 0;
     if (currentExerciseIndex < totalExercises - 1) {
         loadDynamicExercise(currentExerciseIndex + 1);
+    } else {
+        // Last exercise completed, show completion page
+        showCompletionPage();
     }
 }
 
@@ -304,7 +287,17 @@ function updateNavigationButtons() {
     const totalExercises = exerciseGenerator ? exerciseGenerator.getExerciseList().length : 0;
     
     if (prevBtn) prevBtn.disabled = (currentExerciseIndex === 0);
-    if (nextBtn) nextBtn.disabled = (currentExerciseIndex >= totalExercises - 1) || !userAnswers[currentExerciseIndex];
+    
+    if (nextBtn) {
+        if (currentExerciseIndex >= totalExercises - 1) {
+            // On last exercise, show "Finish" button
+            nextBtn.textContent = 'Finish';
+            nextBtn.disabled = false;
+        } else {
+            nextBtn.textContent = 'Next';
+            nextBtn.disabled = false;
+        }
+    }
     
     if (checkBtn) {
         checkBtn.textContent = 'Check Answer';
@@ -314,14 +307,25 @@ function updateNavigationButtons() {
 
 // Show error message
 function showError(message) {
-    const container = document.getElementById('exercise-container');
-    if (container) {
-        container.innerHTML = 
-            '<div class="error-message">' +
-            '<h2>❌ Error</h2>' +
-            '<p>' + message + '</p>' +
-            '<button onclick="location.reload()">Try Again</button>' +
-            '</div>';
+    const exerciseContainer = document.getElementById('exercise-container');
+    const errorContainer = document.getElementById('error-container');
+    const errorText = document.getElementById('error-text');
+    const errorReloadBtn = document.getElementById('error-reload-btn');
+    const controls = document.querySelector('.controls');
+    
+    // Hide exercise and controls
+    if (exerciseContainer) exerciseContainer.style.display = 'none';
+    if (controls) controls.style.display = 'none';
+    
+    // Show error
+    if (errorText) errorText.textContent = message;
+    if (errorContainer) errorContainer.style.display = 'block';
+    
+    // Setup reload button
+    if (errorReloadBtn) {
+        errorReloadBtn.addEventListener('click', function() {
+            location.reload();
+        });
     }
 }
 
@@ -353,8 +357,9 @@ async function showReadme() {
             const htmlContent = markdownToHtml(readmeText);
             content.innerHTML = htmlContent;
         } else {
+            // README not found
             content.innerHTML = 
-                '<div class="error-message">' +
+                '<div class="readme-error">' +
                 '<h3>README Not Found</h3>' +
                 '<p>No README file available for this exercise.</p>' +
                 '<p><strong>Exercise:</strong> ' + exercise.title + '</p>' +
@@ -365,7 +370,7 @@ async function showReadme() {
     } catch (error) {
         console.error('❌ README load error:', error);
         content.innerHTML = 
-            '<div class="error-message">' +
+            '<div class="readme-error">' +
             '<h3>Error Loading README</h3>' +
             '<p>Failed to load README file: ' + error.message + '</p>' +
             '</div>';
@@ -398,6 +403,92 @@ async function regenerateExercise() {
         console.error('❌ Regenerate error:', error);
         showError('Failed to regenerate exercise: ' + error.message);
     }
+}
+
+// Show completion page
+function showCompletionPage() {
+    console.log('🎉 All exercises completed!');
+    
+    const exerciseContainer = document.getElementById('exercise-container');
+    const completionContainer = document.getElementById('completion-container');
+    const controls = document.querySelector('.controls');
+    const resultContainer = document.getElementById('result-container');
+    
+    // Hide exercise, controls and result
+    if (exerciseContainer) exerciseContainer.style.display = 'none';
+    if (controls) controls.style.display = 'none';
+    if (resultContainer) resultContainer.style.display = 'none';
+    
+    // Calculate results
+    const totalExercises = exerciseGenerator ? exerciseGenerator.getExerciseList().length : 0;
+    const correctAnswers = userAnswers.filter(answer => answer === true).length;
+    const score = totalExercises > 0 ? Math.round((correctAnswers / totalExercises) * 100) : 0;
+    
+    // Determine message and emoji based on score
+    let message = '';
+    let emoji = '';
+    if (score >= 90) {
+        emoji = '🏆';
+        message = 'Outstanding! You\'re a Java master!';
+    } else if (score >= 70) {
+        emoji = '🌟';
+        message = 'Great job! You\'re doing really well!';
+    } else if (score >= 50) {
+        emoji = '👍';
+        message = 'Good effort! Keep practicing!';
+    } else {
+        emoji = '💪';
+        message = 'Nice try! Practice makes perfect!';
+    }
+    
+    // Update completion page content
+    const completionEmoji = document.getElementById('completion-emoji');
+    const completionMessage = document.getElementById('completion-message');
+    const statTotal = document.getElementById('stat-total');
+    const statCorrect = document.getElementById('stat-correct');
+    const statScore = document.getElementById('stat-score');
+    
+    if (completionEmoji) completionEmoji.textContent = emoji;
+    if (completionMessage) completionMessage.textContent = message;
+    if (statTotal) statTotal.textContent = totalExercises;
+    if (statCorrect) statCorrect.textContent = correctAnswers;
+    if (statScore) statScore.textContent = score + '%';
+    
+    // Show completion page
+    if (completionContainer) completionContainer.style.display = 'block';
+    
+    // Update progress to 100%
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    if (progressFill) progressFill.style.width = '100%';
+    if (progressText) progressText.textContent = 'Completed!';
+}
+
+// Restart training session
+function restartTraining() {
+    console.log('🔄 Restarting training...');
+    currentExerciseIndex = 0;
+    userAnswers = [];
+    loadedExercises = [];
+    
+    // Hide completion page
+    const completionContainer = document.getElementById('completion-container');
+    if (completionContainer) completionContainer.style.display = 'none';
+    
+    // Show exercise container and controls again
+    const exerciseContainer = document.getElementById('exercise-container');
+    const controls = document.querySelector('.controls');
+    if (exerciseContainer) exerciseContainer.style.display = 'block';
+    if (controls) controls.style.display = 'flex';
+    
+    // Reload first exercise
+    loadDynamicExercise(0);
+}
+
+// Go back to home page
+function goHome() {
+    console.log('🏠 Going home...');
+    window.location.href = 'index.html';
 }
 
 // Simple markdown to HTML converter
