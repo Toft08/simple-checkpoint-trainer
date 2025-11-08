@@ -19,3 +19,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Exercise Content Attribution
+
+The Java programming exercises contained in the `/exercises` directory are 
+derived from educational materials originally created by 01 Edu System 
+(https://github.com/01-edu/public). These exercises are used for educational 
+purposes within this training application.
+
+The application code (trainer interface, state management, UI) is licensed 
+under MIT as stated above. The exercise content retains any original rights 
+held by 01 Edu System.
