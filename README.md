@@ -66,7 +66,7 @@ If you have a better solution or a simpler approach to any of these problems, I'
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/simple-checkpoint-trainer.git
+git clone https://github.com/Toft08/simple-checkpoint-trainer.git
 
 # Navigate to the project
 cd simple-checkpoint-trainer
@@ -87,63 +87,11 @@ npx serve .
 # Then open http://localhost:8000
 ```
 
-## Deploy to GitHub Pages
-
-1. **Create a new repository** on GitHub named `simple-checkpoint-trainer`
-
-2. **Push your code**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/simple-checkpoint-trainer.git
-   git push -u origin main
-   ```
-
-3. **Enable GitHub Pages**:
-   - Go to repository Settings  
-   - Scroll to "Pages" section
-   - Select source: "Deploy from a branch"
-   - Choose branch: "main" and folder: "/ (root)"
-   - Click Save
-
-4. **Access your site** at: `https://toft08.github.io/simple-checkpoint-trainer/`
-
-## GitHub Pages Deployment Notes
-
-- **No build process required** - Pure static files
-- **Mobile-first responsive** - Works great on all devices  
-- **Fast loading** - All resources are client-side
-- **CORS Considerations** - Exercise files load via fetch API
-- **File Structure** - Maintains relative paths for GitHub Pages
-
 ## Mobile Usage
 
-- **Touch & Drag** - Use finger to drag code elements
 - **Tap to Focus** - Touch input fields to enter answers
 - **Swipe Navigation** - Use arrow keys or buttons to navigate
 - **Portrait Mode** - Optimized for phone screens
-
-## Customization
-
-### Adding New Exercises
-
-Edit `exercises.js` to add new exercises:
-
-```javascript
-{
-  id: 11,
-  type: 'fill-blank', // or 'drag-drop'
-  title: 'Your Exercise Title',
-  description: 'Exercise description',
-  code: `Your code with _____ blanks`,
-  blanks: [
-    { answer: 'correct-answer', hint: 'Helpful hint' }
-  ],
-  explanation: 'Why this is the correct answer'
-}
-```
 
 ### Styling Changes
 
