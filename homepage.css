@@ -267,19 +267,6 @@
   margin-bottom: 0.5rem;
 }
 
-.difficulty-percent {
-  font-size: 0.9rem;
-  color: #4a5568;
-  font-weight: 500;
-}
-
-.difficulty-help {
-  text-align: center;
-  color: #4a5568;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
 /* Start Section */
 .start-section {
   text-align: center;

@@ -2,9 +2,9 @@
 class ConfigManager {
     constructor() {
         this.config = {
-            tasks: 5,
+            tasks: 4,
             levels: ['g1', 'g2'],
-            difficulty: 0.5
+            difficulty: 0.75
         };
         
         this.init();
@@ -27,7 +27,8 @@ class ConfigManager {
                 // Add active to clicked
                 btn.classList.add('active');
                 // Update config
-                this.config.tasks = parseInt(btn.dataset.tasks);
+                const taskValue = btn.dataset.tasks;
+                this.config.tasks = taskValue === 'all' ? 'all' : parseInt(taskValue);
                 this.updateSummary();
             });
         });
@@ -71,13 +72,14 @@ class ConfigManager {
         const summary = document.getElementById('session-summary');
         const levelNames = this.config.levels.map(level => level.toUpperCase()).join(', ');
         const difficultyName = this.getDifficultyName(this.config.difficulty);
+        const taskDisplay = this.config.tasks === 'all' ? 'All' : this.config.tasks;
         
         if (this.config.levels.length === 0) {
             summary.textContent = 'Please select at least one level';
             summary.style.color = '#e53e3e';
             document.getElementById('start-training').disabled = true;
         } else {
-            summary.textContent = `${this.config.tasks} tasks • ${levelNames} levels • ${difficultyName} difficulty`;
+            summary.textContent = `${taskDisplay} tasks • ${levelNames} levels • ${difficultyName} difficulty`;
             summary.style.color = '';
             document.getElementById('start-training').disabled = false;
         }
@@ -85,9 +87,9 @@ class ConfigManager {
     
     getDifficultyName(difficulty) {
         switch (difficulty) {
-            case 0.25: return 'Easy';
-            case 0.5: return 'Medium';
-            case 0.75: return 'Hard';
+            case 0.5: return 'Easy';
+            case 0.75: return 'Medium';
+            case 0.9: return 'Hard';
             default: return 'Medium';
         }
     }
@@ -122,9 +124,9 @@ class ConfigManager {
         
         // Default configuration
         return {
-            tasks: 5,
+            tasks: 4,
             levels: ['g1', 'g2'],
-            difficulty: 0.5
+            difficulty: 0.75
         };
     }
 }

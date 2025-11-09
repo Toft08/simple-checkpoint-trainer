@@ -373,6 +373,15 @@ class DynamicExerciseGenerator {
             exercisesByLevel[level] = this.exerciseMetadata.filter(ex => ex.level === level);
         });
         
+        // If "all" is selected, return all exercises from selected levels
+        if (totalTasks === 'all') {
+            const allExercises = [];
+            selectedLevels.forEach(level => {
+                allExercises.push(...exercisesByLevel[level]);
+            });
+            return this.shuffleArray(allExercises);
+        }
+        
         // Calculate how many exercises per level
         const tasksPerLevel = Math.floor(totalTasks / selectedLevels.length);
         const remainder = totalTasks % selectedLevels.length;
@@ -426,9 +435,9 @@ class DynamicExerciseGenerator {
         
         // Default configuration if no homepage config
         return {
-            tasks: 5,
+            tasks: 4,
             levels: ['g1', 'g2'],
-            difficulty: 0.5
+            difficulty: 0.75
         };
     }
 }
