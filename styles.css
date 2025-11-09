@@ -292,11 +292,13 @@ body {
 
 .blank.correct {
   border-color: var(--success-color);
+  color: var(--text-primary);
   background: #f0fdf4;
 }
 
 .blank.incorrect {
   border-color: var(--error-color);
+  color: var(--text-primary);
   background: #fef2f2;
 }
 
@@ -600,6 +602,17 @@ body {
     --border-color: #334155;
     --code-bg: #0f172a;
     --code-color: #cbd5e1;
+  }
+  
+  /* Dark mode correct/incorrect blank colors */
+  .blank.correct {
+    background: #064e3b;
+    color: #d1fae5;
+  }
+  
+  .blank.incorrect {
+    background: #7f1d1d;
+    color: #fecaca;
   }
 }
 
