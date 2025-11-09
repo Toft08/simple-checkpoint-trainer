@@ -277,10 +277,16 @@ class DynamicExerciseGenerator {
         const blanks = [];
         
         sortedBlanks.forEach(blank => {
-            // Replace the text with underscore placeholder
+            // Create underscore placeholder that matches the length of the text
+            // Use minimum of 3 underscores, maximum of 20, and roughly match the text length
+            const textLength = blank.text.length;
+            const underscoreCount = Math.min(20, Math.max(3, textLength));
+            const placeholder = '_'.repeat(underscoreCount);
+            
+            // Replace the text with sized underscore placeholder
             const before = blankedCode.substring(0, blank.start);
             const after = blankedCode.substring(blank.end);
-            blankedCode = before + '_____' + after;
+            blankedCode = before + placeholder + after;
             
             // Add to blanks array (reverse order since we're going backwards)
             // Remove hints - just exact answer validation as requested

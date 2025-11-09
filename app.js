@@ -144,8 +144,12 @@ function createExerciseContentHTML(exercise) {
         let codeWithBlanks = exercise.code;
         let blankIndex = 0;
         
-        codeWithBlanks = codeWithBlanks.replace(/_____/g, function() {
-            return '<input type="text" class="blank" data-blank-index="' + blankIndex++ + '" autocomplete="off" spellcheck="false">';
+        // Replace any sequence of underscores (3 or more) with an input field sized appropriately
+        codeWithBlanks = codeWithBlanks.replace(/_{3,}/g, function(match) {
+            const underscoreCount = match.length;
+            // Calculate width: roughly 8-10px per character works well for monospace
+            const width = Math.max(40, underscoreCount * 9);
+            return '<input type="text" class="blank" data-blank-index="' + blankIndex++ + '" style="width: ' + width + 'px;" autocomplete="off" spellcheck="false">';
         });
         
         return '<div class="code-snippet"><pre><code>' + codeWithBlanks + '</code></pre></div>';

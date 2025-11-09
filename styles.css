@@ -272,7 +272,6 @@ body {
 /* Fill-in-the-blank styles */
 .blank {
   display: inline-block;
-  min-width: 80px;
   height: 28px;
   border: 2px solid var(--border-color);
   border-radius: 4px;
@@ -282,6 +281,7 @@ body {
   font-size: 0.875rem;
   background: var(--card-bg);
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
 }
 
 .blank:focus {
@@ -540,7 +540,6 @@ body {
   }
   
   .blank {
-    min-width: 50px;
     height: 28px;
     font-size: 0.75rem;
   }
