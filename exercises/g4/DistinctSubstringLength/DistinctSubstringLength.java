@@ -2,19 +2,19 @@ import java.util.*;
 
 public class DistinctSubstringLength {
     public int maxLength(String s) {
-        Set<Character> window = new HashSet<>();
-        int left = 0, maxLen = 0;
+        Set<Character> seen = new HashSet<>();
+        int start = 0, maxLen = 0;
 
-        for (int right = 0; right < s.length(); right++) {
-            char c = s.charAt(right);
+        for (int end = 0; end < s.length(); end++) {
+            char ch = s.charAt(end);
 
-            while (window.contains(c)) {
-                window.remove(s.charAt(left));
-                left++;
+            while (seen.contains(ch)) {
+                seen.remove(s.charAt(start));
+                start++;
             }
 
-            window.add(c);
-            maxLen = Math.max(maxLen, right - left +1);
+            seen.add(ch);
+            maxLen = Math.max(maxLen, end - start + 1);
         }
         return maxLen;
     }
