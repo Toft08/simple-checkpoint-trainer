@@ -113,8 +113,11 @@ class DynamicExerciseGenerator {
         // Use custom difficulty or config difficulty
         const difficulty = customDifficulty || this.config.difficulty;
         
+        // Extract protected patterns from README
+        const protectedPatterns = this.extractProtectedPatterns(readme);
+        
         // Find all potential blank positions
-        const candidates = this.findBlankCandidates(javaSource);
+        const candidates = this.findBlankCandidates(javaSource, protectedPatterns);
         
         // Randomly select blanks based on difficulty (percentage of total candidates)
         const numBlanks = Math.max(3, Math.floor(candidates.length * difficulty));
@@ -137,7 +140,57 @@ class DynamicExerciseGenerator {
         };
     }
 
-    findBlankCandidates(javaSource) {
+    // Extract protected patterns from README Expected sections
+    extractProtectedPatterns(readme) {
+        const protectedPatterns = [];
+        
+        // Match "Expected Class", "Expected Classes", "Expected Functions" sections
+        const expectedSectionRegex = /###\s+Expected\s+(Class|Classes|Functions)\s*\n```java\n([\s\S]*?)\n```/gi;
+        
+        let match;
+        while ((match = expectedSectionRegex.exec(readme)) !== null) {
+            const codeBlock = match[2];
+            
+            // Extract imports: import java.time.LocalDate; -> LocalDate
+            const imports = codeBlock.match(/import\s+[\w.]+\.(\w+);/g);
+            if (imports) {
+                imports.forEach(imp => {
+                    const className = imp.match(/\.(\w+);/);
+                    if (className && className[1]) {
+                        protectedPatterns.push(className[1]);
+                    }
+                });
+            }
+            
+            // Extract method signatures, class names, and important identifiers
+            // Method signatures: public/private/protected ... methodName(...)
+            const methodSignatures = codeBlock.match(/(public|private|protected)\s+[\w<>,\[\]\s]+\s+(\w+)\s*\([^)]*\)/g);
+            if (methodSignatures) {
+                methodSignatures.forEach(sig => {
+                    // Extract the method name
+                    const methodName = sig.match(/\s+(\w+)\s*\(/);
+                    if (methodName && methodName[1]) {
+                        protectedPatterns.push(methodName[1]);
+                    }
+                });
+            }
+            
+            // Extract class names: public/private class ClassName
+            const classNames = codeBlock.match(/(public|private)?\s*class\s+(\w+)/g);
+            if (classNames) {
+                classNames.forEach(cls => {
+                    const className = cls.match(/class\s+(\w+)/);
+                    if (className && className[1]) {
+                        protectedPatterns.push(className[1]);
+                    }
+                });
+            }
+        }
+        
+        return protectedPatterns;
+    }
+
+    findBlankCandidates(javaSource, protectedPatterns = []) {
         const candidates = [];
         
         this.blankablePatterns.forEach(pattern => {
@@ -160,6 +213,11 @@ class DynamicExerciseGenerator {
                 
                 // Skip if extracted text is too short or is a keyword that would break syntax
                 if (extractedText.length < 2 || ['public', 'private', 'class', '{', '}'].includes(extractedText)) {
+                    continue;
+                }
+                
+                // Skip if this text is in the protected patterns from README
+                if (protectedPatterns.includes(extractedText)) {
                     continue;
                 }
                 
