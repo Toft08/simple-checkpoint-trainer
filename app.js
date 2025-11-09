@@ -147,8 +147,8 @@ function createExerciseContentHTML(exercise) {
         // Replace any sequence of underscores (3 or more) with an input field sized appropriately
         codeWithBlanks = codeWithBlanks.replace(/_{3,}/g, function(match) {
             const underscoreCount = match.length;
-            // Calculate width: roughly 8-10px per character works well for monospace
-            const width = Math.max(40, underscoreCount * 9);
+            // Calculate width: 10px per character + 20px for padding (more generous sizing)
+            const width = Math.max(50, underscoreCount * 10 + 20);
             return '<input type="text" class="blank" data-blank-index="' + blankIndex++ + '" style="width: ' + width + 'px;" autocomplete="off" spellcheck="false">';
         });
         
