@@ -59,8 +59,8 @@ class DynamicExerciseGenerator {
             { pattern: /import\s+[\w.]+\.(\w+);/g, category: 'import', weight: 0.6, extractGroup: 1 },
             // Variables in assignments (left side)
             { pattern: /(\w+)\s*=\s*[^=]/g, category: 'variable', weight: 0.5, extractGroup: 1 },
-            // String literals (but be selective)
-            { pattern: /"([^"]{2,})"/g, category: 'stringLiteral', weight: 0.3, extractGroup: 1 },
+            // String literals (DISABLED - causes position issues)
+            // { pattern: /"([^"]{2,})"/g, category: 'stringLiteral', weight: 0.3, extractGroup: 1 },
             // Number literals (but avoid -1 which is often important)
             { pattern: /\b(?!-1\b)(\d+)\b/g, category: 'numberLiteral', weight: 0.4, extractGroup: 1 },
             // Exception types in catch blocks
@@ -110,6 +110,25 @@ class DynamicExerciseGenerator {
     }
 
     generateExercise(metadata, javaSource, readme, customDifficulty = null) {
+        // Skip blanking for problematic exercises (currently empty - for testing)
+        const skipBlankingExercises = [];
+        
+        if (skipBlankingExercises.includes(metadata.folder)) {
+            // Return the complete code without blanks for now
+            return {
+                id: metadata.id,
+                level: metadata.level,
+                folder: metadata.folder,
+                type: 'fill-blank',
+                title: metadata.title,
+                description: metadata.description,
+                code: javaSource,
+                blanks: [], // No blanks for this exercise
+                readme: readme,
+                explanation: `Complete the ${metadata.folder} implementation with the missing code elements.`
+            };
+        }
+        
         // Use custom difficulty or config difficulty
         const difficulty = customDifficulty || this.config.difficulty;
         
@@ -277,6 +296,13 @@ class DynamicExerciseGenerator {
         const blanks = [];
         
         sortedBlanks.forEach(blank => {
+            // Verify the text at this position matches what we expect
+            const actualText = blankedCode.substring(blank.start, blank.end);
+            if (actualText !== blank.text) {
+                console.warn(`Skipping blank - expected "${blank.text}" but found "${actualText}" at position ${blank.start}-${blank.end}`);
+                return; // Skip this blank if text doesn't match
+            }
+            
             // Create underscore placeholder that matches the length of the text
             // Use minimum of 3 underscores, maximum of 20, and roughly match the text length
             const textLength = blank.text.length;
