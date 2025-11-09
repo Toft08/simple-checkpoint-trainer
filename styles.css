@@ -280,6 +280,7 @@ body {
   font-family: var(--font-code);
   font-size: 0.875rem;
   background: var(--card-bg);
+  color: var(--text-primary);
   transition: border-color 0.2s ease;
   box-sizing: border-box;
 }
