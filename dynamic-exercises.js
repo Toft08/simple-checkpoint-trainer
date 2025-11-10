@@ -181,32 +181,53 @@ class DynamicExerciseGenerator {
                 });
             }
             
-            // Extract method signatures, class names, and important identifiers
-            // Method signatures: public/private/protected ... methodName(...)
-            const methodSignatures = codeBlock.match(/(public|private|protected)\s+[\w<>,\[\]\s]+\s+(\w+)\s*\([^)]*\)/g);
-            if (methodSignatures) {
-                methodSignatures.forEach(sig => {
-                    // Extract the method name
-                    const methodName = sig.match(/\s+(\w+)\s*\(/);
+            // Extract class names: public class ClassName, class ClassName, interface ClassName
+            const classNames = codeBlock.match(/(?:public\s+)?(?:class|interface)\s+(\w+)/g);
+            if (classNames) {
+                classNames.forEach(cls => {
+                    const name = cls.match(/(?:class|interface)\s+(\w+)/);
+                    if (name && name[1]) {
+                        protectedPatterns.push(name[1]);
+                    }
+                });
+            }
+            
+            // Extract method signatures: methodName(
+            const methods = codeBlock.match(/\w+\s+(\w+)\s*\(/g);
+            if (methods) {
+                methods.forEach(method => {
+                    const methodName = method.match(/(\w+)\s*\(/);
                     if (methodName && methodName[1]) {
                         protectedPatterns.push(methodName[1]);
                     }
                 });
             }
             
-            // Extract class names: public/private class ClassName
-            const classNames = codeBlock.match(/(public|private)?\s*class\s+(\w+)/g);
-            if (classNames) {
-                classNames.forEach(cls => {
-                    const className = cls.match(/class\s+(\w+)/);
-                    if (className && className[1]) {
-                        protectedPatterns.push(className[1]);
+            // Extract generic types: List<String> -> List, Map<String, Integer> -> Map
+            const generics = codeBlock.match(/(\w+)<[^>]+>/g);
+            if (generics) {
+                generics.forEach(gen => {
+                    const typeName = gen.match(/(\w+)</);
+                    if (typeName && typeName[1]) {
+                        protectedPatterns.push(typeName[1]);
+                    }
+                });
+            }
+            
+            // Extract field/variable names from declarations: private Type fieldName
+            const fields = codeBlock.match(/(?:private|public|protected)\s+\w+(?:<[^>]+>)?\s+(\w+)\s*[=;]/g);
+            if (fields) {
+                fields.forEach(field => {
+                    const fieldName = field.match(/\s+(\w+)\s*[=;]/);
+                    if (fieldName && fieldName[1]) {
+                        protectedPatterns.push(fieldName[1]);
                     }
                 });
             }
         }
         
-        return protectedPatterns;
+        // Remove duplicates
+        return [...new Set(protectedPatterns)];
     }
 
     findBlankCandidates(javaSource, protectedPatterns = []) {
